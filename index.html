@@ -3,63 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi POS - Cloud Firebase</title>
+    <title>POS - Cloud System</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode"></script>
     
     <style>
-        /* CSS TETAP 100% SAMA DENGAN ASLINYA */
         :root {
             --primary-color: #3f51b5; --primary-light: #e8eaf6; --success-color: #4caf50;
             --danger-color: #f44336; --warning-color: #ff9800; --text-color: #333;
             --grey-color: #757575; --light-grey: #f5f5f5; --sidebar-width: 260px;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background-color: #f0f2f5; color: var(--text-color); min-height: 100vh; }
-        .hidden { display: none !important; }
-        .btn { padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease; justify-content: center; }
-        .btn-primary { background-color: var(--primary-color); color: white; }
-        .btn-success { background-color: var(--success-color); color: white; }
-        .btn-danger { background-color: var(--danger-color); color: white; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; margin-bottom: 15px; font-size: 14px; background: white; }
-        input:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px var(--primary-light); }
-        .store-logo-img { width: 55px; height: 55px; object-fit: contain; border-radius: 50%; display: block; margin: 0 auto 10px; border: 2px solid var(--primary-color); background: white; }
-        .logo-placeholder { font-size: 55px; color: var(--primary-color); display: block; margin: 0 auto 10px; text-align: center; }
-        .receipt-logo-img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px; }
-        #login-page { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); padding: 20px; }
-        .login-card { background: white; padding: 35px 30px; border-radius: 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.06); text-align: center; width: 100%; max-width: 420px; }
-        #main-layout { display: flex; flex-direction: column; min-height: 100vh; }
-        .mobile-header { display: flex; align-items: center; justify-content: space-between; background: white; padding: 12px 20px; border-bottom: 1px solid #e0e0e0; position: sticky; top: 0; z-index: 99; }
-        .mobile-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--primary-color); }
-        #sidebar { position: fixed; top: 0; left: calc(-1 * var(--sidebar-width)); width: var(--sidebar-width); height: 100vh; background: white; border-right: 1px solid #e0e0e0; z-index: 100; transition: left 0.3s ease; padding: 20px 0; }
-        #sidebar.active { left: 0; }
-        .sidebar-menu { list-style: none; margin-top: 15px; }
-        .sidebar-menu li { padding: 14px 24px; display: flex; align-items: center; gap: 15px; cursor: pointer; color: #555; }
-        .sidebar-menu li.active { background-color: var(--primary-light); color: var(--primary-color); }
-        #content-area { flex-grow: 1; padding: 20px; width: 100%; max-width: 1400px; margin: 0 auto; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .stat-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; }
-        .item-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .pos-grid { display: flex; flex-direction: column; gap: 20px; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; overflow-y: auto; max-height: 60vh; }
-        .product-box { background: white; padding: 15px 10px; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center; cursor: pointer; }
-        .pos-cart { background: white; border-radius: 12px; border: 1px solid #e0e0e0; overflow: hidden; display: flex; flex-direction: column; }
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
-        .modal-box { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; }
-        .receipt-paper { background: #fff; padding: 15px; font-family: monospace; font-size: 12px; border: 1px dashed #777; width: 100%; max-width: 300px; margin: 0 auto; }
-        .receipt-divider { border-top: 1px dashed #000; margin: 8px 0; }
-        .receipt-row { display: flex; justify-content: space-between; gap: 5px; }
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.4); z-index: 98; display: none; }
-        .sidebar-overlay.active { display: block; }
-        .wa-input-container { position: relative; width: 100%; display: flex; align-items: center; margin-top: 5px; margin-bottom: 15px; }
-        .wa-input-container .clear-wa-btn { position: absolute; right: 12px; color: var(--grey-color); cursor: pointer; font-size: 20px; }
-        
-        /* Qty Input in Cart */
-        .qty-input-cart { width: 50px !important; padding: 4px !important; margin: 0 !important; text-align: center; border: 1px solid #ddd; border-radius: 4px; }
 
-        @media (min-width: 992px) { .mobile-header { display: none; } #sidebar { left: 0; } #content-area { padding-left: 280px; } .pos-grid { flex-direction: row; } .pos-cart { width: 380px; position: sticky; top: 25px; } }
-        @media print { body * { visibility: hidden !important; } #print-section-area, #print-section-area * { visibility: visible !important; } #print-section-area { position: absolute; left: 0; top: 0; width: 100%; } .modal-overlay, .btn, .modal-actions { display: none !important; } .receipt-paper { border: none; width: 58mm; } }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f0f2f5; color: var(--text-color); min-height: 100vh; overflow-x: hidden; }
+        .hidden { display: none !important; }
+
+        /* UI Components */
+        .btn { padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; justify-content: center; }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-success { background: var(--success-color); color: white; }
+        .btn-danger { background: var(--danger-color); color: white; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 15px; font-size: 14px; background: white; }
+        input:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px var(--primary-light); }
+
+        /* Layout */
+        #main-layout { display: flex; flex-direction: column; min-height: 100vh; }
+        #sidebar { position: fixed; top: 0; left: calc(-1 * var(--sidebar-width)); width: var(--sidebar-width); height: 100vh; background: white; border-right: 1px solid #e0e0e0; z-index: 1000; transition: 0.3s ease; padding: 20px 0; }
+        #sidebar.active { left: 0; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.4); z-index: 999; display: none; }
+        .sidebar-overlay.active { display: block; }
+        .sidebar-menu { list-style: none; margin-top: 20px; }
+        .sidebar-menu li { padding: 14px 24px; display: flex; align-items: center; gap: 15px; cursor: pointer; color: #555; transition: 0.2s; }
+        .sidebar-menu li:hover, .sidebar-menu li.active { background: var(--primary-light); color: var(--primary-color); border-right: 4px solid var(--primary-color); }
+
+        #content-area { flex-grow: 1; width: 100%; padding: 20px; transition: 0.3s; }
+        .mobile-header { display: flex; align-items: center; justify-content: space-between; background: white; padding: 12px 20px; border-bottom: 1px solid #e0e0e0; position: sticky; top: 0; z-index: 100; }
+        .mobile-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--primary-color); }
+        .mobile-brand img, .store-logo-img { width: 35px; height: 35px; border-radius: 50%; object-fit: contain; border: 1px solid #ddd; background: white; }
+
+        /* Dashboard */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 15px; border-radius: 15px; border: 1px solid #eee; text-align: center; cursor: pointer; transition: 0.2s; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .stat-card i { font-size: 28px; margin-bottom: 8px; display: block; }
+        .stat-card .title { font-size: 11px; color: var(--grey-color); text-transform: uppercase; font-weight: 600; }
+        .stat-card .value { font-size: 16px; font-weight: 700; margin-top: 4px; }
+
+        /* POS Layout */
+        .pos-container { display: flex; flex-direction: column; gap: 20px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+        .product-box { background: white; padding: 15px 10px; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center; cursor: pointer; transition: 0.2s; }
+        .product-box:hover { border-color: var(--primary-color); background: var(--primary-light); }
+        .pos-cart { background: white; border-radius: 15px; border: 1px solid #e0e0e0; overflow: hidden; display: flex; flex-direction: column; }
+        .cart-items { padding: 10px; min-height: 150px; max-height: 350px; overflow-y: auto; background: #fafafa; }
+        .cart-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 10px; background: white; border-radius: 8px; border: 1px solid #eee; font-size: 13px; }
+        .qty-input { width: 55px !important; padding: 5px !important; margin: 0 !important; text-align: center; border: 1px solid #ddd; border-radius: 4px; font-weight: bold; }
+
+        /* List Cards */
+        .item-card { background: white; padding: 15px; border-radius: 12px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+
+        /* Modal & Struk */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 2000; padding: 15px; }
+        .modal-box { background: white; padding: 20px; border-radius: 15px; width: 100%; max-width: 450px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .receipt-paper { background: #fff; padding: 15px; font-family: 'Courier New', Courier, monospace; font-size: 12px; color: #000; border: 1px solid #ddd; width: 100%; max-width: 300px; margin: 0 auto; }
+        .receipt-divider { border-top: 1px dashed #000; margin: 8px 0; }
+        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 2px; }
+
+        @media (min-width: 992px) {
+            #sidebar { left: 0; }
+            #content-area { padding-left: calc(var(--sidebar-width) + 20px); }
+            .mobile-header { display: none; }
+            .pos-container { flex-direction: row; align-items: flex-start; }
+            .pos-cart { width: 380px; position: sticky; top: 20px; }
+            .stats-grid { grid-template-columns: repeat(6, 1fr); }
+        }
+
+        @media print {
+            body * { visibility: hidden !important; }
+            #print-section-area, #print-section-area * { visibility: visible !important; }
+            #print-section-area { position: absolute; left: 0; top: 0; width: 100%; }
+            .receipt-paper { border: none !important; width: 58mm; padding: 0; margin: 0; }
+        }
     </style>
 </head>
 <body>
@@ -68,33 +93,33 @@
 
     <!-- LOGIN PAGE -->
     <div id="login-page">
-        <div class="auth-container">
-            <div id="auth-login-card" class="login-card">
-                <div class="login-logo-container-class"><i class="material-icons logo-placeholder">storefront</i></div>
-                <h2 class="dynamic-store-name-view">Toko POS</h2>
-                <p style="font-size: 13px; color: var(--grey-color); margin-bottom: 15px;">Sistem Kasir & Manajemen Stok POS</p>
-                <hr style="margin-bottom: 20px; border: 0; border-top: 1px solid #eee;">
-                <div style="text-align: left;">
-                    <label>Email Pengguna</label>
-                    <input type="email" id="login-email" placeholder="admin@toko.com">
-                    <label>Kata Sandi</label>
-                    <div style="position:relative">
-                        <input type="password" id="login-password" placeholder="******">
-                        <span class="material-icons" style="position:absolute; right:10px; top:13px; cursor:pointer" onclick="window.togglePasswordVisibility('login-password', this)">visibility_off</span>
-                    </div>
+        <div class="login-card" id="auth-login-card">
+            <div class="login-logo-container-class"><i class="material-icons" style="font-size: 50px; color: var(--primary-color);">storefront</i></div>
+            <h2 class="dynamic-store-name-view" style="margin-bottom: 5px;">POS</h2>
+            <p style="font-size: 12px; color: gray; margin-bottom: 20px;">Sistem Kasir Cloud Terintegrasi</p>
+            <div style="text-align: left;">
+                <label>Email Pengguna</label>
+                <input type="email" id="login-email" placeholder="admin@toko.com">
+                <label>Kata Sandi</label>
+                <div style="position:relative">
+                    <input type="password" id="login-password" placeholder="******">
+                    <span class="material-icons" style="position:absolute; right:10px; top:12px; cursor:pointer; color:#999" onclick="window.togglePwd('login-password', this)">visibility_off</span>
                 </div>
-                <button class="btn btn-primary" style="width:100%" onclick="window.handleLogin()">MASUK KE AKUN</button>
-                <div style="margin-top:20px; font-size:13px;">Belum punya akun? <a href="javascript:void(0)" onclick="window.switchAuthCard('register')">Buat Akun Baru</a></div>
+                <button class="btn btn-primary" style="width:100%; height:45px; margin-top:10px" onclick="window.handleLogin()">MASUK KE SISTEM</button>
+                <p style="margin-top:20px; font-size:12px;">Belum punya akun toko? <a href="javascript:void(0)" onclick="window.switchAuth('register')">Daftar Baru</a></p>
             </div>
-            <div id="auth-register-card" class="login-card hidden">
-                <div class="login-logo-container-class"><i class="material-icons logo-placeholder" style="color:var(--success-color)">add_business</i></div>
-                <h2>Daftar Akun Toko</h2>
+        </div>
+
+        <div class="login-card hidden" id="auth-register-card">
+            <i class="material-icons" style="font-size: 48px; color: var(--success-color);">add_business</i>
+            <h2>Daftar Toko Baru</h2>
+            <div style="text-align: left; margin-top: 15px;">
                 <input type="text" id="reg-store-name" placeholder="Nama Toko">
                 <input type="text" id="reg-admin-name" placeholder="Nama Pemilik">
-                <input type="email" id="reg-email" placeholder="Email Baru">
+                <input type="email" id="reg-email" placeholder="Email Login">
                 <input type="password" id="reg-password" placeholder="Password (Min 6 Karakter)">
-                <button class="btn btn-success" style="width:100%" onclick="window.handleRegisterStore()">DAFTARKAN SEKARANG</button>
-                <div style="margin-top:20px; font-size:13px;"><a href="javascript:void(0)" onclick="window.switchAuthCard('login')">Kembali Login</a></div>
+                <button class="btn btn-success" style="width:100%; height:45px" onclick="window.handleRegister()">DAFTARKAN SEKARANG</button>
+                <p style="margin-top:20px; font-size:12px;"><a href="javascript:void(0)" onclick="window.switchAuth('login')">Kembali ke Login</a></p>
             </div>
         </div>
     </div>
@@ -102,13 +127,14 @@
     <!-- MAIN LAYOUT -->
     <div id="main-layout" class="hidden">
         <div class="mobile-header">
-            <div class="mobile-brand"><div id="mobile-logo-container"></div><span id="mob-store-name">SalesPro</span></div>
+            <div class="mobile-brand"><div id="mobile-logo-container"></div><span id="mob-store-name">POS</span></div>
             <button class="btn" onclick="window.toggleSidebar(true)"><i class="material-icons">menu</i></button>
         </div>
         <div class="sidebar-overlay" id="sidebar-overlay" onclick="window.toggleSidebar(false)"></div>
+        
         <div id="sidebar">
-            <div style="text-align:center; padding:20px;" id="sidebar-logo-container"></div>
-            <h3 id="side-store-name" style="text-align:center; font-size:16px; margin-bottom:10px;">Toko POS</h3>
+            <div style="text-align:center; padding:0 20px;" id="sidebar-logo-container"></div>
+            <h3 id="side-store-name" style="text-align:center; font-size:16px; margin: 10px 0; font-weight: 700;">Toko POS</h3>
             <ul class="sidebar-menu">
                 <li class="active" onclick="window.switchPage(0, this)"><i class="material-icons">dashboard</i>Dashboard</li>
                 <li onclick="window.switchPage(1, this)"><i class="material-icons">history</i>Riwayat</li>
@@ -124,82 +150,90 @@
             <!-- DASHBOARD -->
             <div id="page-dashboard" class="page-component">
                 <div class="page-title" id="dash-welcome">Halo!</div>
-                <div style="display:flex; justify-content:space-between; margin:20px 0; gap:10px;">
-                    <select id="dash-filter-select" onchange="window.renderDashboard()" style="margin:0; width:auto;"><option value="Harian">Harian</option><option value="Mingguan">Mingguan</option><option value="Bulanan">Bulanan</option></select>
-                    <button class="btn btn-success" onclick="window.exportCSV()"><i class="material-icons">download</i>Export CSV</button>
+                <div style="display:flex; justify-content:space-between; margin:20px 0; gap:10px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="display:flex; gap:10px; flex:1;">
+                        <div style="flex:1"><label style="font-size:10px; font-weight:bold;">DARI</label><input type="date" id="filter-start" onchange="window.renderDashboard()" style="margin:0; padding:8px;"></div>
+                        <div style="flex:1"><label style="font-size:10px; font-weight:bold;">SAMPAI</label><input type="date" id="filter-end" onchange="window.renderDashboard()" style="margin:0; padding:8px;"></div>
+                    </div>
+                    <button class="btn btn-success" onclick="window.exportCSV()"><i class="material-icons">download</i>Export</button>
                 </div>
                 <div class="stats-grid">
-                    <div class="stat-card" onclick="window.showDashboardDetail('Total Omset')"><i class="material-icons" style="color:var(--primary-color)">payments</i><div class="title">Total Omset</div><div id="stat-omzet" class="value">Rp 0</div></div>
-                    <div class="stat-card" onclick="window.showDashboardDetail('Untung Bersih')"><i class="material-icons" style="color:var(--success-color)">monetization_on</i><div class="title">Untung Bersih</div><div id="stat-untung" class="value">Rp 0</div></div>
-                    <div class="stat-card"><i class="material-icons" style="color:teal">trending_up</i><div class="title">Margin Jual</div><div id="stat-margin" class="value">0%</div></div>
-                    <div class="stat-card" onclick="window.showDashboardDetail('Stok Menipis')"><i class="material-icons" style="color:var(--danger-color)">warning</i><div class="title">Stok Menipis</div><div id="stat-lowstock" class="value">0 Item</div></div>
-                    <div class="stat-card" onclick="window.showDashboardDetail('Semua Produk')"><i class="material-icons" style="color:purple">inventory</i><div class="title">Jenis Produk</div><div id="stat-allproducts" class="value">0</div></div>
-                    <div class="stat-card" onclick="window.showDashboardDetail('Total Transaksi')"><i class="material-icons" style="color:var(--warning-color)">receipt</i><div class="title">Transaksi</div><div id="stat-counttx" class="value">0</div></div>
+                    <div class="stat-card" onclick="window.showDashDetail('Total Omset')"><i class="material-icons" style="color:var(--primary-color)">payments</i><div class="title">Omset</div><div id="stat-omzet" class="value">Rp 0</div></div>
+                    <div class="stat-card" onclick="window.showDashDetail('Untung Bersih')"><i class="material-icons" style="color:var(--success-color)">monetization_on</i><div class="title">Untung</div><div id="stat-untung" class="value">Rp 0</div></div>
+                    <div class="stat-card"><i class="material-icons" style="color:teal">trending_up</i><div class="title">Margin</div><div id="stat-margin" class="value">0%</div></div>
+                    <div class="stat-card" onclick="window.showDashDetail('Stok Menipis')"><i class="material-icons" style="color:var(--danger-color)">warning</i><div class="title">Stok Tipis</div><div id="stat-lowstock" class="value">0</div></div>
+                    <div class="stat-card" onclick="window.showDashDetail('Semua Produk')"><i class="material-icons" style="color:purple">inventory</i><div class="title">Produk</div><div id="stat-allproducts" class="value">0</div></div>
+                    <div class="stat-card" onclick="window.showDashDetail('Total Transaksi')"><i class="material-icons" style="color:var(--warning-color)">receipt</i><div class="title">Transaksi</div><div id="stat-counttx" class="value">0</div></div>
                 </div>
             </div>
 
-            <!-- RIWAYAT -->
-            <div id="page-history" class="page-component hidden">
-                <div class="page-title">Riwayat Transaksi</div>
-                <input type="text" id="history-search" placeholder="Cari invoice..." oninput="window.renderHistory()">
-                <div id="history-list" class="list-container"></div>
-            </div>
-
-            <!-- PRODUK -->
-            <div id="page-product" class="page-component hidden">
-                <div class="page-title">Manajemen Produk</div>
-                <div style="display:flex; flex-direction:column; gap:10px; margin: 15px 0;">
-                    <button class="btn btn-primary" onclick="window.openScannerModalForPage('product')"><i class="material-icons">qr_code_scanner</i>Scan Barcode</button>
-                    <div style="display:flex; gap:10px;"><input type="text" id="product-search" placeholder="Cari..." oninput="window.renderProducts()" style="margin:0"><button class="btn btn-primary" onclick="window.openProductModal()">Tambah</button></div>
-                </div>
-                <div id="product-list" class="list-container"></div>
-            </div>
-
-            <!-- KASIR -->
+            <!-- POS -->
             <div id="page-pos" class="page-component hidden">
-                <div class="pos-grid">
-                    <div style="flex:1;">
-                        <button class="btn btn-primary" style="width:100%; margin-bottom:10px" onclick="window.openScannerModalForPage('pos')"><i class="material-icons">qr_code_scanner</i>Scan Kamera Barcode</button>
-                        <input type="text" id="pos-search" placeholder="Cari barang..." oninput="window.renderPosProducts()">
+                <div class="pos-container">
+                    <div class="pos-products">
+                        <div style="display:flex; gap:10px; margin-bottom:15px;">
+                            <button class="btn btn-primary" onclick="window.openScanner('pos')"><i class="material-icons">qr_code_scanner</i></button>
+                            <input type="text" id="pos-search" placeholder="Cari barang atau scan..." oninput="window.renderPosProducts()" style="margin:0">
+                        </div>
                         <div class="products-grid" id="pos-products-grid"></div>
                     </div>
-                    <div class="pos-cart" style="background:white; border-radius:12px; border:1px solid #eee; overflow:hidden">
-                        <div style="padding:15px; background:#f9f9f9; font-weight:bold; text-align:center;">Keranjang Kasir</div>
-                        <div id="cart-items-container" style="padding:10px; min-height:150px;"></div>
+                    <div class="pos-cart">
+                        <div style="padding:15px; background:#f9f9f9; font-weight:bold; text-align:center; border-bottom:1px solid #eee;">KERANJANG BELANJA</div>
+                        <div id="cart-items-container" class="cart-items"></div>
                         <div style="padding:15px; border-top:1px solid #eee;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Total:</span><span id="cart-total-view" style="font-weight:bold; font-size:18px; color:var(--primary-color)">Rp 0</span></div>
-                            <select id="pos-payment-method" onchange="window.togglePaymentFields()" style="margin-bottom:10px"><option value="Cash">Tunai (Cash)</option><option value="QRIS">QRIS / Digital</option></select>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Total:</span><span id="cart-total-view" style="font-weight:bold; font-size:20px; color:var(--primary-color)">Rp 0</span></div>
+                            <select id="pos-payment-method" onchange="window.togglePaymentFields()"><option value="Cash">Tunai (Cash)</option><option value="Digital">Digital / QRIS</option></select>
                             <div id="cash-fields">
-                                <input type="text" id="cart-cash-input" placeholder="Bayar Tunai (Rp)" oninput="window.formatRupiahInput(this); window.calculateChange();">
+                                <input type="text" id="cart-cash-input" placeholder="Uang Bayar (Rp)" oninput="window.rupiahInp(this); window.calcChange();">
                                 <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Kembali:</span><span id="cart-change-view" style="font-weight:bold; color:var(--success-color)">Rp 0</span></div>
                             </div>
-                            <button class="btn btn-success" style="width:100%; height:45px;" onclick="window.processPayment()">PROSES TRANSAKSI</button>
+                            <button class="btn btn-success" style="width:100%; height:50px; font-size:16px;" onclick="window.processPayment()">PROSES TRANSAKSI</button>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- PRODUK -->
+            <div id="page-product" class="page-component hidden">
+                <div class="page-title">Manajemen Produk</div>
+                <div class="page-subtitle">Kelola daftar barang, harga, dan SKU</div>
+                <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:15px;">
+                    <button class="btn btn-primary" onclick="window.openScanner('product')"><i class="material-icons">qr_code_scanner</i>Scan Barcode</button>
+                    <div style="display:flex; gap:10px;"><input type="text" id="product-search" placeholder="Cari..." oninput="window.renderProducts()" style="margin:0"><button class="btn btn-primary" onclick="window.openProdModal()">Tambah</button></div>
+                </div>
+                <div id="product-list"></div>
+            </div>
+
             <!-- STOK -->
             <div id="page-stock" class="page-component hidden">
-                <div class="page-title">Manajemen Stok</div>
-                <button class="btn btn-primary" style="width:100%; margin:15px 0" onclick="window.openScannerModalForPage('stock')">Scan Cari Produk Stok</button>
-                <input type="text" id="stock-search" placeholder="Cari produk..." oninput="window.renderStockManagement()">
-                <div id="stock-list" class="list-container"></div>
+                <div class="page-title">Stok Gudang</div>
+                <div class="page-subtitle">Update jumlah persediaan barang secara real-time</div>
+                <button class="btn btn-primary" style="width:100%; margin:15px 0" onclick="window.openScanner('stock')">Scan Cari Produk</button>
+                <input type="text" id="stock-search" placeholder="Cari produk..." oninput="window.renderStock()">
+                <div id="stock-list"></div>
+            </div>
+
+            <!-- RIWAYAT -->
+            <div id="page-history" class="page-component hidden">
+                <div class="page-title">Riwayat Transaksi</div>
+                <div class="page-subtitle">Daftar semua penjualan kasir terpusat</div>
+                <div class="search-bar"><i class="material-icons">search</i><input type="text" id="history-search" placeholder="Cari invoice..." oninput="window.renderHistory()"></div>
+                <div id="history-list"></div>
             </div>
 
             <!-- PENGATURAN -->
             <div id="page-settings" class="page-component hidden">
-                <div class="page-title">Pengaturan</div>
-                <div class="card-panel">
-                    <div style="display:flex; align-items:center; gap:15px; margin-bottom: 20px;">
+                <div class="page-title">Pengaturan Toko</div>
+                <div style="background:white; padding:20px; border-radius:15px; border:1px solid #eee; margin-top:15px;">
+                    <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px; flex-wrap: wrap;">
                         <div id="settings-logo-preview" style="width:80px;height:80px;border:2px dashed #ccc;border-radius:50%;display:flex;justify-content:center;align-items:center;overflow:hidden;"><i class="material-icons">storefront</i></div>
                         <div><label style="font-weight:600; font-size:12px">Logo Toko (Maks 500KB)</label><input type="file" accept="image/*" onchange="window.previewLogo(this)"></div>
                     </div>
                     <label>Nama Toko</label><input type="text" id="set-store-name">
                     <label>Nama Admin</label><input type="text" id="set-admin-name">
-                    <label>Alamat</label><input type="text" id="set-store-address">
+                    <label>Alamat Lengkap</label><input type="text" id="set-store-address">
                     <label>WhatsApp Toko</label><input type="text" id="set-store-phone">
-                    <label>NPWP</label><input type="text" id="set-store-npwp">
+                    <label>Nomor NPWP</label><input type="text" id="set-store-npwp">
                     <button class="btn btn-primary" style="width:100%; height:45px" onclick="window.saveSettings()">SIMPAN PERUBAHAN</button>
                 </div>
             </div>
@@ -213,6 +247,7 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, collection, addDoc, onSnapshot, query, orderBy, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // --- KONFIGURASI FIREBASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyA5U73qhP8-gUe88qqXlT6cnp40RctwEWA",
             authDomain: "pos-kasir-ed85e.firebaseapp.com",
@@ -232,23 +267,28 @@
         let globalTransactions = [];
         let storeConfig = {};
         let cart = [];
-        let html5QrcodeScanner = null;
+        let html5Scanner = null;
         let tempLogoBase64 = "";
         window.currentTx = null;
 
+        // Set default date filter
+        const todayStr = new Date().toISOString().split('T')[0];
+        document.getElementById('filter-start').value = todayStr;
+        document.getElementById('filter-end').value = todayStr;
+
         // --- UTILS ---
-        window.formatRupiah = (n) => 'Rp ' + (n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        window.cleanNumber = (s) => parseInt(String(s).replace(/[^\d]/g, '')) || 0;
-        window.formatRupiahInput = (el) => { let v = el.value.replace(/[^\d]/g, ''); el.value = v ? parseInt(v).toLocaleString('id-ID') : ''; };
-        window.togglePasswordVisibility = (id, el) => { const x = document.getElementById(id); x.type = x.type === 'password' ? 'text' : 'password'; el.innerText = x.type === 'password' ? 'visibility_off' : 'visibility'; };
+        window.rupiah = (n) => 'Rp ' + (n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        window.cleanNum = (s) => parseInt(String(s).replace(/[^\d]/g, '')) || 0;
+        window.rupiahInp = (el) => { let v = el.value.replace(/[^\d]/g, ''); el.value = v ? parseInt(v).toLocaleString('id-ID') : ''; };
+        window.togglePwd = (id, el) => { const x = document.getElementById(id); x.type = x.type === 'password' ? 'text' : 'password'; el.innerText = x.type === 'password' ? 'visibility_off' : 'visibility'; };
 
         // --- AUTH ---
         window.handleLogin = async () => {
             const e = document.getElementById('login-email').value.trim();
             const p = document.getElementById('login-password').value;
-            try { await signInWithEmailAndPassword(auth, e, p); } catch(err) { alert("Login Gagal!"); }
+            try { await signInWithEmailAndPassword(auth, e, p); } catch(err) { alert("Login Gagal! Periksa Email/Password"); }
         };
-        window.handleRegisterStore = async () => {
+        window.handleRegister = async () => {
             const sn = document.getElementById('reg-store-name').value.trim();
             const an = document.getElementById('reg-admin-name').value.trim();
             const e = document.getElementById('reg-email').value.trim();
@@ -257,10 +297,10 @@
             try {
                 const res = await createUserWithEmailAndPassword(auth, e, p);
                 await setDoc(doc(db, "users", res.user.uid), { config: { name: sn, admin: an, address: "", phone: "", npwp: "", logo: "", email: e } });
-                alert("Berhasil!"); window.switchAuthCard('login');
-            } catch(err) { alert(err.message); }
+                alert("Berhasil Daftar!"); window.switchAuth('login');
+            } catch(err) { alert("Gagal: " + err.message); }
         };
-        window.handleLogout = () => { if(confirm("Keluar?")) signOut(auth); };
+        window.handleLogout = () => { if(confirm("Keluar dari aplikasi?")) signOut(auth); };
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -285,7 +325,7 @@
             });
             onSnapshot(collection(db, "users", uid, "products"), (snap) => {
                 globalProducts = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                window.renderProducts(); window.renderPosProducts(); window.renderStockManagement(); window.renderDashboard();
+                window.renderProducts(); window.renderPosProducts(); window.renderStock(); window.renderDashboard();
             });
             onSnapshot(query(collection(db, "users", uid, "transactions"), orderBy("timestamp", "desc")), (snap) => {
                 globalTransactions = snap.docs.map(d => ({id: d.id, ...d.data()}));
@@ -302,7 +342,7 @@
             document.getElementById('dash-welcome').innerText = "Halo, " + (storeConfig.admin || "Admin") + "!";
             
             const logoHtml = logoUrl ? `<img src="${logoUrl}" class="store-logo-img">` : `<i class="material-icons logo-placeholder">storefront</i>`;
-            const headerLogoHtml = logoUrl ? `<img src="${logoUrl}" style="width:32px;height:32px;object-fit:contain;border-radius:50%">` : `<i class="material-icons" style="color:var(--primary-color)">storefront</i>`;
+            const headerLogoHtml = logoUrl ? `<img src="${logoUrl}" style="width:32px;height:32px;object-fit:contain;border-radius:50%">` : `<i class="material-icons">storefront</i>`;
             
             document.getElementById('sidebar-logo-container').innerHTML = logoHtml;
             document.getElementById('mobile-logo-container').innerHTML = headerLogoHtml;
@@ -311,13 +351,12 @@
 
         // --- DASHBOARD LOGIC ---
         function getFiltered() {
-            const f = document.getElementById('dash-filter-select').value;
-            const now = new Date();
+            const start = new Date(document.getElementById('filter-start').value);
+            const end = new Date(document.getElementById('filter-end').value);
+            end.setHours(23, 59, 59);
             return globalTransactions.filter(t => {
                 const d = new Date(t.timestamp);
-                if(f === 'Harian') return now.toDateString() === d.toDateString();
-                if(f === 'Mingguan') return (now - d) / 86400000 <= 7;
-                return now.getMonth() === d.getMonth() && now.getFullYear() === d.getFullYear();
+                return d >= start && d <= end;
             });
         }
 
@@ -325,20 +364,21 @@
             const txs = getFiltered();
             const omzet = txs.reduce((s,t) => s + t.total, 0);
             const modal = txs.reduce((s,t) => s + (t.totalCost || 0), 0);
-            document.getElementById('stat-omzet').innerText = window.formatRupiah(omzet);
-            document.getElementById('stat-untung').innerText = window.formatRupiah(omzet - modal);
+            const untung = omzet - modal;
+            document.getElementById('stat-omzet').innerText = rupiah(omzet);
+            document.getElementById('stat-untung').innerText = rupiah(untung);
             document.getElementById('stat-margin').innerText = omzet > 0 ? (((omzet-modal)/omzet)*100).toFixed(1) + "%" : "0%";
             document.getElementById('stat-lowstock').innerText = globalProducts.filter(p => (p.stock || 0) < 5).length + " Item";
             document.getElementById('stat-allproducts').innerText = globalProducts.length;
             document.getElementById('stat-counttx').innerText = txs.length;
         };
 
-        window.showDashboardDetail = (title) => {
+        window.showDashDetail = (title) => {
             let h = `<h3>Detail ${title}</h3><hr style='margin:10px 0'><div style='max-height:250px; overflow-y:auto;'>`;
             if(title === 'Total Omset' || title === 'Untung Bersih' || title === 'Total Transaksi') {
-                getFiltered().forEach(t => h += `<div class='receipt-row'><span>${t.invoice}</span><b>${window.formatRupiah(t.total)}</b></div>`);
+                getFiltered().forEach(t => h += `<div class='receipt-row'><span>${t.invoice}</span><b>${rupiah(t.total)}</b></div>`);
             } else if(title === 'Stok Menipis') {
-                globalProducts.filter(p => (p.stock || 0) < 5).forEach(p => h += `<div class='receipt-row'><span>${p.name}</span><b style='color:red'>Sisa ${p.stock}</b></div>`);
+                globalProducts.filter(p => (p.stock||0) < 5).forEach(p => h += `<div class='receipt-row'><span>${p.name}</span><b style='color:red'>Sisa ${p.stock}</b></div>`);
             } else if(title === 'Semua Produk') {
                 globalProducts.forEach(p => h += `<div class='receipt-row'><span>${p.name}</span><b>Stok: ${p.stock}</b></div>`);
             }
@@ -348,11 +388,11 @@
 
         window.exportCSV = () => {
             const txs = getFiltered();
-            if(txs.length === 0) return alert("Data kosong");
-            let csv = "Invoice,Tanggal,Metode,Total,Profit\n";
-            txs.forEach(t => { csv += `${t.invoice},${t.date},${t.method},${t.total},${t.total - (t.totalCost || 0)}\n`; });
+            if(txs.length === 0) return alert("Data kosong pada periode ini");
+            let csv = "Invoice,Tanggal,Total,Profit\n";
+            txs.forEach(t => { csv += `${t.invoice},${t.date},${t.total},${t.total - (t.totalCost || 0)}\n`; });
             const blob = new Blob([csv], { type: 'text/csv' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Laporan_POS.csv`; a.click();
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Laporan.csv`; a.click();
         };
 
         // --- POS LOGIC ---
@@ -372,41 +412,38 @@
         };
 
         window.processPayment = async () => {
-            const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            const tot = cart.reduce((s,i) => s + (i.price*i.qty), 0);
             const method = document.getElementById('pos-payment-method').value;
-            let cash = total;
+            let cash = tot;
             if(method === 'Cash') {
-                cash = window.cleanNumber(document.getElementById('cart-cash-input').value);
-                if(cash < total) return alert("Uang kurang!");
+                cash = cleanNum(document.getElementById('cart-cash-input').value);
+                if(cash < tot) return alert("Uang kurang!");
             }
             if(cart.length === 0) return alert("Keranjang kosong!");
 
             const tx = {
-                invoice: "INV-" + Date.now(),
+                invoice: "INV-"+Date.now(),
                 timestamp: Date.now(),
                 date: new Date().toLocaleString('id-ID'),
-                total: total,
-                totalCost: cart.reduce((s,i)=>s+((i.cost || 0)*i.qty),0),
+                total: tot,
+                totalCost: cart.reduce((s,i)=>s+((i.cost||0)*i.qty),0),
                 method: method,
-                cashAmount: cash,
-                changeAmount: cash - total,
+                cash: cash,
                 items: [...cart]
             };
 
-            try {
-                await addDoc(collection(db, "users", currentUser.uid, "transactions"), tx);
-                for(let i of cart) {
-                    const p = globalProducts.find(x => x.id === i.id);
-                    await updateDoc(doc(db, "users", currentUser.uid, "products", i.id), { stock: p.stock - i.qty });
-                }
-                window.showReceipt(tx);
-                cart = []; window.renderCart(); document.getElementById('cart-cash-input').value = "";
-            } catch(e) { alert("Gagal proses transaksi"); }
+            await addDoc(collection(db, "users", currentUser.uid, "transactions"), tx);
+            for(let i of cart) {
+                const p = globalProducts.find(x => x.id === i.id);
+                await updateDoc(doc(db, "users", currentUser.uid, "products", i.id), { stock: p.stock - i.qty });
+            }
+            window.showReceipt(tx);
+            cart = []; window.renderCart(); document.getElementById('cart-cash-input').value = "";
         };
 
         window.showReceipt = (tx) => {
             window.currentTx = tx;
-            let its = tx.items.map(i => `<div class='receipt-row'><span>${i.name} x${i.qty}</span><span>${window.formatRupiah(i.price*i.qty)}</span></div>`).join('');
+            let its = tx.items.map(i => `<div class='receipt-row'><span>${i.name} x${i.qty}</span><span>${rupiah(i.price*i.qty)}</span></div>`).join('');
             let lg = storeConfig.logo ? `<center><img src='${storeConfig.logo}' style='width:50px;margin-bottom:5px'></center>` : '';
             window.openModal(`
                 <div class='receipt-paper' id='thermal-struk'>
@@ -417,21 +454,17 @@
                     <div class='receipt-divider'></div>
                     ${its}
                     <div class='receipt-divider'></div>
-                    <div class='receipt-row'><strong>TOTAL</strong><strong>${window.formatRupiah(tx.total)}</strong></div>
-                    <div class='receipt-row'><span>BAYAR</span><span>${window.formatRupiah(tx.cashAmount)}</span></div>
-                    <div class='receipt-row'><span>KEMBALI</span><span>${window.formatRupiah(tx.changeAmount)}</span></div>
+                    <div class='receipt-row'><strong>TOTAL</strong><strong>${rupiah(tx.total)}</strong></div>
+                    <div class='receipt-row'><span>BAYAR</span><span>${rupiah(tx.cash)}</span></div>
+                    <div class='receipt-row'><span>KEMBALI</span><span>${rupiah(tx.cash - tx.total)}</span></div>
                 </div>
-                <div style='margin-top:15px; text-align:left;'>
-                    <label style='font-size:12px; font-weight:600;'>Kirim WhatsApp Pelanggan:</label>
-                    <div class='wa-input-container'>
-                        <input type='text' id='wa-num' placeholder='Contoh: 08123456789' style='margin:0;'>
-                        <span class='material-icons clear-wa-btn' onclick="document.getElementById('wa-num').value=''">cancel</span>
-                    </div>
+                <div style='margin-top:15px'>
+                    <input type='text' id='wa-num' placeholder='No WA Pelanggan (08...)' style='margin-bottom:10px'>
                 </div>
-                <div style='display:flex;gap:5px;margin-top:10px'>
+                <div style='display:flex;gap:5px'>
                     <button class='btn btn-danger' style='flex:1' onclick='window.closeModal()'>Tutup</button>
                     <button class='btn btn-primary' style='flex:1' onclick='window.realPrint()'><i class='material-icons'>print</i>Cetak</button>
-                    <button class='btn btn-success' style='flex:1.5; background:#25D366' onclick='window.sendWA()'><i class='material-icons'>share</i>WhatsApp</button>
+                    <button class='btn btn-success' style='flex:1.5; background:#25D366' onclick='window.sendWA()'><i class='material-icons'>share</i>WA</button>
                 </div>
             `);
         };
@@ -448,12 +481,28 @@
             if(!n) return alert("Isi nomor WA!");
             if(n.startsWith('0')) n = '62' + n.slice(1);
             let msg = `*${storeConfig.name.toUpperCase()}*\nNo. Inv: ${tx.invoice}\n------------------\n`;
-            tx.items.forEach(i => msg += `${i.name} x${i.qty} = ${window.formatRupiah(i.price*i.qty)}\n`);
-            msg += `------------------\n*TOTAL: ${window.formatRupiah(tx.total)}*\nTerima kasih!`;
+            tx.items.forEach(i => msg += `${i.name} x${i.qty} = ${rupiah(i.price*i.qty)}\n`);
+            msg += `------------------\n*TOTAL: ${rupiah(tx.total)}*\nTerima kasih!`;
             window.open(`https://wa.me/${n}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
         // --- SETTINGS ---
+        window.saveSettings = async () => {
+            const upd = {
+                name: String(document.getElementById('set-store-name').value || ""),
+                admin: String(storeConfig.admin || ""),
+                address: String(document.getElementById('set-store-address').value || ""),
+                phone: String(document.getElementById('set-store-phone').value || ""),
+                npwp: String(document.getElementById('set-store-npwp').value || ""),
+                logo: String(tempLogoBase64 || storeConfig.logo || ""),
+                email: String(storeConfig.email || currentUser.email || "")
+            };
+            try {
+                await setDoc(doc(db, "users", currentUser.uid), { config: upd }, { merge: true });
+                alert("Berhasil Disimpan!");
+            } catch(e) { alert("Gagal Simpan"); }
+        };
+
         window.previewLogo = (input) => {
             const file = input.files[0];
             if (file) {
@@ -463,22 +512,10 @@
                 reader.readAsDataURL(file);
             }
         };
-        window.saveSettings = async () => {
-            const upd = {
-                name: String(document.getElementById('set-store-name').value || ""),
-                admin: String(document.getElementById('set-admin-name').value || ""),
-                address: String(document.getElementById('set-store-address').value || ""),
-                phone: String(document.getElementById('set-store-phone').value || ""),
-                npwp: String(document.getElementById('set-store-npwp').value || ""),
-                logo: String(tempLogoBase64 || storeConfig.logo || ""),
-                email: String(storeConfig.email || currentUser.email || "")
-            };
-            try { await setDoc(doc(db, "users", currentUser.uid), { config: upd }, { merge: true }); alert("Berhasil!"); } catch(e) { alert("Gagal Simpan"); }
-        };
+
         window.loadSettingsUI = () => {
             const cfg = storeConfig;
             document.getElementById('set-store-name').value = cfg.name || "";
-            document.getElementById('set-admin-name').value = cfg.admin || "";
             document.getElementById('set-store-address').value = cfg.address || "";
             document.getElementById('set-store-phone').value = cfg.phone || "";
             document.getElementById('set-store-npwp').value = cfg.npwp || "";
@@ -486,84 +523,30 @@
         };
 
         // --- SCANNER ---
-        window.openScannerModalForPage = (target) => {
-            window.openModal(`<h3>Scan Barcode</h3><hr style='margin:10px 0'><div id='cam' style='width:100%;height:250px;background:black'></div><button class='btn btn-danger' style='width:100%;margin-top:10px' onclick='window.stopScanner()'>Tutup Kamera</button>`);
+        window.openScanner = (target) => {
+            window.openModal(`<h3>Scan Barcode</h3><hr style='margin:10px 0'><div id='cam' style='width:100%;height:250px;background:black'></div><button class='btn btn-danger' style='width:100%;margin-top:10px' onclick='window.stopScanner()'>Tutup</button>`);
             setTimeout(() => {
-                html5QrcodeScanner = new Html5QrcodeScanner("cam", { fps: 10, qrbox: 220 });
-                html5QrcodeScanner.render((txt) => {
+                html5Scanner = new Html5QrcodeScanner("cam", { fps: 10, qrbox: 220 });
+                html5Scanner.render((txt) => {
                     if(target === 'pos') {
                         const p = globalProducts.find(x => x.sku === txt);
-                        if(p) { window.addToCart(p.id); alert("Ditambah: " + p.name); } else alert("Barcode tidak terdaftar");
+                        if(p) { window.addCart(p.id); alert("Ditambah: " + p.name); } else alert("Barcode tidak terdaftar");
                     } else if(target === 'input-sku') {
                         document.getElementById('f-sku').value = txt; window.stopScanner();
                     } else {
                         document.getElementById(target==='product'?'product-search':'stock-search').value = txt;
-                        target==='product'?window.renderProducts():window.renderStockManagement();
+                        target==='product'?window.renderProducts():window.renderStock();
                         window.stopScanner();
                     }
                 });
             }, 500);
         };
-        window.stopScanner = () => { if(html5QrcodeScanner) html5QrcodeScanner.clear().then(window.closeModal).catch(window.closeModal); else window.closeModal(); };
+        window.stopScanner = () => { if(html5Scanner) html5Scanner.clear().then(window.closeModal).catch(window.closeModal); else window.closeModal(); };
 
-        // --- PRODUCT & STOCK ---
-        window.saveProduct = async (id) => {
-            const d = { sku: document.getElementById('f-sku').value, name: document.getElementById('f-name').value, cost: window.cleanNumber(document.getElementById('f-cost').value), price: window.cleanNumber(document.getElementById('f-price').value) };
-            if(id && id !== 'null') await updateDoc(doc(db, "users", currentUser.uid, "products", id), d);
-            else { d.stock = 0; await addDoc(collection(db, "users", currentUser.uid, "products"), d); }
-            window.closeModal();
-        };
-        window.deleteProduct = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "users", currentUser.uid, "products", id)); };
-        window.renderProducts = () => {
-            let q = document.getElementById('product-search').value.toLowerCase();
-            let h = '';
-            globalProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)).forEach(p => h += `<div class='item-card'><div><strong>${p.name}</strong><br><small>${window.formatRupiah(p.price)}</small></div><button class='btn btn-success' onclick="window.openProductModal('${p.id}')">Edit</button></div>`);
-            document.getElementById('product-list').innerHTML = h;
-        };
-        window.openProductModal = (id = null) => {
-            const p = globalProducts.find(x => x.id === id) || {sku:'', name:'', cost:0, price:0};
-            window.openModal(`<h3>${id?'Edit':'Tambah'}</h3><label>SKU</label><div style='display:flex;gap:5px'><input type='text' id='f-sku' value='${p.sku}' style='margin:0;flex:1'><button class='btn btn-primary' onclick='window.openScanner("input-sku")'>Scan</button></div><label>Nama</label><input type='text' id='f-name' value='${p.name}'><label>HPP</label><input type='number' id='f-cost' value='${p.cost}'><label>Jual</label><input type='number' id='f-price' value='${p.price}'><button class='btn btn-success' style='width:100%' onclick='window.saveProduct("${id}")'>Simpan</button>`);
-        };
-        window.renderPosProducts = () => {
-            let q = document.getElementById('pos-search').value.toLowerCase();
-            let h = '';
-            globalProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)).forEach(p => h += `<div class='product-box' onclick="window.addToCart('${p.id}')"><h5>${p.name}</h5><b>${window.formatRupiah(p.price)}</b><br><small>Stok: ${p.stock}</small></div>`);
-            document.getElementById('pos-products-grid').innerHTML = h;
-        };
-        window.addToCart = (id) => {
-            const p = globalProducts.find(x => x.id === id);
-            const ex = cart.find(x => x.id === id);
-            if((p.stock||0) <= (ex ? ex.qty : 0)) return alert("Stok Habis!");
-            if(ex) ex.qty++; else cart.push({...p, qty: 1});
-            window.renderCart();
-        };
-        window.renderCart = () => {
-            let h = ''; cart.forEach((i, idx) => h += `<div class='receipt-row' style='margin-bottom:8px; align-items:center;'><span>${i.name}</span><div style='display:flex; align-items:center; gap:5px;'><input type='number' class='qty-input-cart' value='${i.qty}' onchange='window.updateCartQty(${idx}, this.value)'><i class='material-icons' style='color:red;cursor:pointer' onclick="window.remCart(${idx})">delete</i></div></div>`);
-            document.getElementById('cart-items-container').innerHTML = h;
-            const tot = cart.reduce((s,i) => s + (i.price*i.qty), 0);
-            document.getElementById('cart-total-view').innerText = window.formatRupiah(tot);
-            window.calculateChange();
-        };
-        window.remCart = (idx) => { cart.splice(idx,1); window.renderCart(); };
-        window.renderStockManagement = () => {
-            let h = ''; globalProducts.forEach(p => h += `<div class='item-card'><span>${p.name}</span><div style='display:flex;align-items:center;gap:10px'><button class='btn' onclick="window.changeStock('${p.id}',-1)">-</button><b>${p.stock}</b><button class='btn' onclick="window.changeStock('${p.id}',1)">+</button></div></div>`);
-            document.getElementById('stock-list').innerHTML = h;
-        };
-        window.changeStock = async (id, v) => {
-            const p = globalProducts.find(x => x.id === id);
-            await updateDoc(doc(db, "users", currentUser.uid, "products", id), { stock: Math.max(0, (p.stock || 0) + v) });
-        };
-        window.renderHistory = () => {
-            let q = document.getElementById('history-search').value.toLowerCase();
-            let h = '';
-            globalTransactions.filter(t => t.invoice.toLowerCase().includes(q)).forEach(t => h += `<div class='item-card' onclick='window.showReceipt(${JSON.stringify(t)})' style='cursor:pointer'><div><strong>${t.invoice}</strong><small>${t.date}</small></div><b>${window.formatRupiah(t.total)}</b></div>`);
-            document.getElementById('history-list').innerHTML = h;
-        };
-
-        // --- NAVIGATION ---
+        // --- UI HELPERS ---
         window.openModal = (h) => { document.getElementById('modal-content').innerHTML = h; document.getElementById('modal-container').classList.remove('hidden'); };
         window.closeModal = () => document.getElementById('modal-container').classList.add('hidden');
-        window.switchAuthCard = (t) => { document.getElementById('auth-login-card').classList.toggle('hidden', t==='register'); document.getElementById('auth-register-card').classList.toggle('hidden', t==='login'); };
+        window.switchAuth = (t) => { document.getElementById('auth-login-card').classList.toggle('hidden', t==='register'); document.getElementById('auth-register-card').classList.toggle('hidden', t==='login'); };
         window.toggleSidebar = (b) => { document.getElementById('sidebar').classList.toggle('active', b); document.getElementById('sidebar-overlay').classList.toggle('active', b); };
         window.switchPage = (idx, el) => {
             document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
@@ -573,6 +556,81 @@
             document.getElementById(pgs[idx]).classList.remove('hidden');
             if(pgs[idx] === 'page-settings') window.loadSettingsUI();
             window.toggleSidebar(false);
+        };
+
+        // --- PRODUK & POS RENDER ---
+        window.renderProducts = () => {
+            let q = document.getElementById('product-search').value.toLowerCase();
+            let h = '';
+            globalProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)).forEach(p => h += `<div class='item-card'><div><strong>${p.name}</strong><br><small>${rupiah(p.price)}</small></div><button class='btn btn-success' onclick="window.openProdModal('${p.id}')">Edit</button></div>`);
+            document.getElementById('product-list').innerHTML = h;
+        };
+        window.renderPosProducts = () => {
+            let q = document.getElementById('pos-search').value.toLowerCase();
+            let h = '';
+            globalProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)).forEach(p => h += `<div class='product-box' onclick="window.addCart('${p.id}')"><h5>${p.name}</h5><b>${rupiah(p.price)}</b><br><small>Stok: ${p.stock}</small></div>`);
+            document.getElementById('pos-products-grid').innerHTML = h;
+        };
+        window.addCart = (id) => {
+            const p = globalProducts.find(x => x.id === id);
+            const ex = cart.find(x => x.id === id);
+            if((p.stock||0) <= (ex ? ex.qty : 0)) return alert("Stok Habis!");
+            if(ex) ex.qty++; else cart.push({...p, qty: 1});
+            window.renderCart();
+        };
+        window.renderCart = () => {
+            let h = ''; 
+            cart.forEach((i, idx) => {
+                h += `<div class='cart-row'>
+                    <span>${i.name}</span>
+                    <div style='display:flex; align-items:center; gap:5px;'>
+                        <input type='number' class='qty-input' value='${i.qty}' onchange='window.updateCartQty(${idx}, this.value)'>
+                        <i class='material-icons' style='color:red;cursor:pointer' onclick="window.remCart(${idx})">delete</i>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('cart-items-container').innerHTML = h || '<center>Kosong</center>';
+            const tot = cart.reduce((s,i) => s + (i.price*i.qty), 0);
+            document.getElementById('cart-total-view').innerText = rupiah(tot);
+            window.calcChange();
+        };
+        window.remCart = (idx) => { cart.splice(idx,1); window.renderCart(); };
+        window.calcChange = () => {
+            const t = cart.reduce((s,i)=>s+(i.price*i.qty),0);
+            const c = cleanNum(document.getElementById('cart-cash-input').value);
+            document.getElementById('cart-change-view').innerText = rupiah(Math.max(0, c-t));
+        };
+        window.renderStock = () => {
+            let q = document.getElementById('stock-search').value.toLowerCase();
+            let h = '';
+            globalProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)).forEach(p => {
+                h += `<div class="item-card"><span>${p.name}</span><div style='display:flex;align-items:center;gap:10px'><button class='btn' onclick='window.upStock("${p.id}",-1)'>-</button><input type="number" class="qty-input" value="${p.stock}" onchange="window.typeStock('${p.id}', this.value)"><button class='btn' onclick='window.upStock("${p.id}",1)'>+</button></div></div>`;
+            });
+            document.getElementById('stock-list').innerHTML = h;
+        };
+        window.typeStock = async (id, val) => {
+            let n = parseInt(val); if (isNaN(n) || n < 0) n = 0;
+            await updateDoc(doc(db, "users", currentUser.uid, "products", id), { stock: n });
+        };
+        window.upStock = async (id, v) => {
+            const p = globalProducts.find(x => x.id === id);
+            await updateDoc(doc(db, "users", currentUser.uid, "products", id), { stock: Math.max(0, (p.stock || 0) + v) });
+        };
+        window.renderHistory = () => {
+            let q = document.getElementById('history-search').value.toLowerCase();
+            let h = '';
+            globalTransactions.filter(t => t.invoice.toLowerCase().includes(q)).forEach(t => h += `<div class='item-card' onclick='window.showReceipt(${JSON.stringify(t)})' style='cursor:pointer'><div><strong>${t.invoice}</strong><small>${t.date}</small></div><b>${window.rupiah(t.total)}</b></div>`);
+            document.getElementById('history-list').innerHTML = h;
+        };
+        window.openProdModal = (id = null) => {
+            const p = globalProducts.find(x => x.id === id) || {sku:'', name:'', cost:0, price:0};
+            window.openModal(`<h3>Produk</h3><label>SKU</label><div style='display:flex;gap:5px'><input type='text' id='f-sku' value='${p.sku}' style='margin:0;flex:1'><button class='btn btn-primary' onclick="window.openScanner('input-sku')">Scan</button></div><label>Nama</label><input type='text' id='f-name' value='${p.name}'><label>HPP</label><input type='number' id='f-cost' value='${p.cost}'><label>Jual</label><input type='number' id='f-price' value='${p.price}'><button class='btn btn-success' style='width:100%' onclick='window.saveProd("${id}")'>Simpan</button>`);
+        };
+        window.saveProd = async (id) => {
+            const d = { sku: document.getElementById('f-sku').value, name: document.getElementById('f-name').value, cost: window.cleanNum(document.getElementById('f-cost').value), price: window.cleanNum(document.getElementById('f-price').value) };
+            if(id && id !== 'null') await updateDoc(doc(db, "users", currentUser.uid, "products", id), d);
+            else { d.stock = 0; await addDoc(collection(db, "users", currentUser.uid, "products"), d); }
+            window.closeModal();
         };
     </script>
 </body>
