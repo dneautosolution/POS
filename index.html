@@ -9,6 +9,45 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
     
     <style>
+        /* --- LOGIN PAGE STYLES --- */
+#login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #f0f2f5; /* Menyamakan background luar */
+}
+
+.login-card {
+    background: white;
+    padding: 30px 25px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 400px; /* Membatasi lebar form agar rapi di desktop/tablet */
+    box-sizing: border-box;
+}
+
+.login-logo-container-class {
+    margin-bottom: 15px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--text-color);
+}
+
+.login-card input {
+    margin-bottom: 18px; /* Jarak antar input yang lebih lega */
+}
+
         :root {
             --primary-color: #3f51b5; --primary-light: #e8eaf6; --success-color: #4caf50;
             --danger-color: #f44336; --warning-color: #ff9800; --text-color: #333;
@@ -94,17 +133,18 @@
     <!-- LOGIN PAGE -->
     <div id="login-page">
         <div class="login-card" id="auth-login-card">
-            <div class="login-logo-container-class"><i class="material-icons" style="font-size: 50px; color: var(--primary-color);">storefront</i></div>
-            <h2 class="dynamic-store-name-view" style="margin-bottom: 5px;">POS</h2>
-            <p style="font-size: 12px; color: gray; margin-bottom: 20px;">Sistem Kasir Cloud Terintegrasi</p>
+          <center><div class="login-logo-container-class"><i class="material-icons" style="font-size: 50px; color: var(--primary-color);">storefront</i></div></center>
+            <center><h2 class="dynamic-store-name-view" style="margin-bottom: 5px;">POS</h2>
+            <p style="font-size: 12px; color: gray; margin-bottom: 20px;">Sistem Kasir Cloud Terintegrasi</p></center>
             <div style="text-align: left;">
                 <label>Email Pengguna</label>
                 <input type="email" id="login-email" placeholder="admin@toko.com">
                 <label>Kata Sandi</label>
-                <div style="position:relative">
-                    <input type="password" id="login-password" placeholder="******">
-                    <span class="material-icons" style="position:absolute; right:10px; top:12px; cursor:pointer; color:#999" onclick="window.togglePwd('login-password', this)">visibility_off</span>
-                </div>
+<div style="position:relative">
+    <input type="password" id="login-password" placeholder="******" style="margin-bottom: 0;">
+    <span class="material-icons" style="position:absolute; right:12px; top:50%; transform: translateY(-50%); cursor:pointer; color:#999" onclick="window.togglePwd('login-password', this)">visibility_off</span>
+</div>
+<div style="margin-bottom: 18px;"></div> 
                 <button class="btn btn-primary" style="width:100%; height:45px; margin-top:10px" onclick="window.handleLogin()">MASUK KE SISTEM</button>
                 <p style="margin-top:20px; font-size:12px;">Belum punya akun toko? <a href="javascript:void(0)" onclick="window.switchAuth('register')">Daftar Baru</a></p>
             </div>
