@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi POS - Full Cloud Firebase</title>
+    <title>POS SalesPro - Cloud Firebase</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -22,64 +22,78 @@
         .btn-success { background-color: var(--success-color); color: white; }
         .btn-danger { background-color: var(--danger-color); color: white; }
         input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; margin-bottom: 15px; font-size: 14px; background: white; }
-        input:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px var(--primary-light); }
+        
+        /* Logo & Header */
         .store-logo-img { width: 55px; height: 55px; object-fit: contain; border-radius: 50%; display: block; margin: 0 auto 10px; border: 2px solid var(--primary-color); background: white; }
+        .header-logo-img { width: 32px; height: 32px; object-fit: contain; border-radius: 50%; }
+        .receipt-logo-img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 5px; }
         .logo-placeholder { font-size: 55px; color: var(--primary-color); display: block; margin: 0 auto 10px; text-align: center; }
+
         #login-page { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); padding: 20px; }
         .login-card { background: white; padding: 35px 30px; border-radius: 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.06); text-align: center; width: 100%; max-width: 420px; }
         #main-layout { display: flex; flex-direction: column; min-height: 100vh; }
         .mobile-header { display: flex; align-items: center; justify-content: space-between; background: white; padding: 12px 20px; border-bottom: 1px solid #e0e0e0; position: sticky; top: 0; z-index: 99; }
+        .mobile-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--primary-color); }
         #sidebar { position: fixed; top: 0; left: calc(-1 * var(--sidebar-width)); width: var(--sidebar-width); height: 100vh; background: white; border-right: 1px solid #e0e0e0; z-index: 100; transition: left 0.3s ease; padding: 20px 0; }
         #sidebar.active { left: 0; }
         .sidebar-menu { list-style: none; margin-top: 15px; }
         .sidebar-menu li { padding: 14px 24px; display: flex; align-items: center; gap: 15px; cursor: pointer; color: #555; }
         .sidebar-menu li.active { background-color: var(--primary-light); color: var(--primary-color); border-right: 4px solid var(--primary-color); }
         #content-area { flex-grow: 1; padding: 20px; width: 100%; max-width: 1400px; margin: 0 auto; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .stat-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; }
-        .item-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; margin-bottom:10px; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; overflow-y: auto; max-height: 60vh; }
-        .product-box { background: white; padding: 15px 10px; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center; cursor: pointer; }
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
-        .modal-box { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; }
-        .receipt-paper { background: #fff; padding: 15px; font-family: monospace; font-size: 12px; border: 1px dashed #777; width: 100%; max-width: 300px; margin: 0 auto; }
-        .receipt-divider { border-top: 1px dashed #000; margin: 8px 0; }
-        .receipt-row { display: flex; justify-content: space-between; gap: 5px; }
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.4); z-index: 98; display: none; }
         .sidebar-overlay.active { display: block; }
+
+        /* POS & Cards */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .stat-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; overflow-y: auto; max-height: 60vh; }
+        .product-box { background: white; padding: 15px 10px; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center; cursor: pointer; }
+        .item-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
+        .modal-box { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; }
+
+        /* Struk Style */
+        .receipt-paper { background: #fff; padding: 10px; font-family: 'Courier New', Courier, monospace; font-size: 12px; color: #000; width: 100%; max-width: 300px; margin: 0 auto; border: 1px solid #eee; }
+        .receipt-divider { border-top: 1px dashed #000; margin: 8px 0; }
+        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 2px; }
+
         @media (min-width: 992px) { .mobile-header { display: none; } #sidebar { left: 0; } #content-area { padding-left: 280px; } }
+
+        @media print {
+            body * { visibility: hidden !important; }
+            #print-section-area, #print-section-area * { visibility: visible !important; }
+            #print-section-area { position: absolute; left: 0; top: 0; width: 100%; }
+            .receipt-paper { border: none !important; width: 58mm; padding: 0; margin: 0; }
+        }
     </style>
 </head>
 <body>
 
     <div id="print-section-area"></div>
 
-    <!-- HALAMAN LOGIN -->
+    <!-- LOGIN PAGE -->
     <div id="login-page">
         <div class="auth-container">
-            <div id="auth-login-card" class="login-card">
+            <div class="login-card" id="auth-login-card">
                 <div class="login-logo-container-class"><i class="material-icons logo-placeholder">storefront</i></div>
                 <h2 class="dynamic-store-name-view">POS SalesPro</h2>
                 <div style="text-align: left; margin-top: 20px;">
                     <label>Email Pengguna</label>
                     <input type="email" id="login-email" placeholder="admin@toko.com">
                     <label>Kata Sandi</label>
-                    <div style="position:relative">
-                        <input type="password" id="login-password" placeholder="******">
-                        <span class="material-icons" style="position:absolute; right:10px; top:13px; cursor:pointer" onclick="window.togglePwd('login-password', this)">visibility_off</span>
-                    </div>
+                    <input type="password" id="login-password" placeholder="******">
                 </div>
                 <button class="btn btn-primary" style="width:100%" onclick="window.handleLogin()">MASUK</button>
-                <div style="margin-top:20px; font-size:13px;">Belum punya akun? <a href="javascript:void(0)" onclick="window.switchAuth('register')">Daftar Akun Baru</a></div>
+                <p style="margin-top:20px; font-size:12px;">Belum punya akun? <a href="javascript:void(0)" onclick="window.switchAuth('register')">Daftar Baru</a></p>
             </div>
-            <div id="auth-register-card" class="login-card hidden">
+            <div class="login-card hidden" id="auth-register-card">
                 <h2>Daftar Toko Baru</h2>
                 <input type="text" id="reg-store-name" placeholder="Nama Toko">
                 <input type="text" id="reg-admin-name" placeholder="Nama Pemilik">
-                <input type="email" id="reg-email" placeholder="Email Baru">
-                <input type="password" id="reg-password" placeholder="Password (Min. 6 Karakter)">
+                <input type="email" id="reg-email" placeholder="Email">
+                <input type="password" id="reg-password" placeholder="Password">
                 <button class="btn btn-success" style="width:100%" onclick="window.handleRegister()">DAFTAR</button>
-                <div style="margin-top:20px; font-size:13px;"><a href="javascript:void(0)" onclick="window.switchAuth('login')">Kembali ke Login</a></div>
+                <p style="margin-top:20px; font-size:12px;"><a href="javascript:void(0)" onclick="window.switchAuth('login')">Kembali Login</a></p>
             </div>
         </div>
     </div>
@@ -87,16 +101,13 @@
     <!-- LAYOUT UTAMA -->
     <div id="main-layout" class="hidden">
         <div class="mobile-header">
-            <div class="mobile-brand">
-                <div id="mobile-logo-container"><i class="material-icons" style="color:var(--primary-color)">storefront</i></div>
-                <span id="mob-store-name">SalesPro</span>
-            </div>
+            <div class="mobile-brand"><div id="mobile-logo-container"></div><span id="mob-store-name">SalesPro</span></div>
             <button class="btn" onclick="window.toggleSidebar(true)"><i class="material-icons">menu</i></button>
         </div>
         <div class="sidebar-overlay" id="sidebar-overlay" onclick="window.toggleSidebar(false)"></div>
         <div id="sidebar">
-            <div style="text-align:center; padding:20px;" id="sidebar-logo-container"><i class="material-icons logo-placeholder">storefront</i></div>
-            <h3 id="side-store-name" style="text-align:center; padding:0 10px; font-size:16px;">Toko POS</h3>
+            <div style="text-align:center; padding:20px;" id="sidebar-logo-container"></div>
+            <h3 id="side-store-name" style="text-align:center; font-size:16px; margin-bottom:10px;">Toko POS</h3>
             <ul class="sidebar-menu">
                 <li class="active" onclick="window.switchPage(0, this)"><i class="material-icons">dashboard</i>Dashboard</li>
                 <li onclick="window.switchPage(1, this)"><i class="material-icons">history</i>Riwayat</li>
@@ -112,81 +123,63 @@
             <!-- DASHBOARD -->
             <div id="page-dashboard" class="page-component">
                 <div class="page-title" id="dash-welcome">Halo!</div>
-                <!-- BAGIAN SUBTITLE TOKO SUDAH DIHAPUS DARI SINI -->
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px; gap:10px; margin-top:15px;">
+                <div style="display:flex; justify-content:space-between; margin:20px 0; gap:10px;">
                     <select id="dash-filter-select" onchange="window.renderDashboard()" style="margin:0; width:auto;"><option value="Harian">Harian</option><option value="Mingguan">Mingguan</option><option value="Bulanan">Bulanan</option></select>
                     <button class="btn btn-success" onclick="window.exportCSV()"><i class="material-icons">download</i>Export CSV</button>
                 </div>
                 <div class="stats-grid">
                     <div class="stat-card" onclick="window.showDashDetail('Total Omset')"><i class="material-icons" style="color:var(--primary-color)">payments</i><div class="title">Total Omset</div><div id="stat-omzet" class="value">Rp 0</div></div>
                     <div class="stat-card" onclick="window.showDashDetail('Untung Bersih')"><i class="material-icons" style="color:var(--success-color)">monetization_on</i><div class="title">Untung Bersih</div><div id="stat-untung" class="value">Rp 0</div></div>
-                    <div class="stat-card"><i class="material-icons" style="color:teal">trending_up</i><div class="title">Margin Jual</div><div id="stat-margin" class="value">0%</div></div>
-                    <div class="stat-card" onclick="window.showDashDetail('Stok Menipis')"><i class="material-icons" style="color:var(--danger-color)">warning</i><div class="title">Stok Menipis</div><div id="stat-lowstock" class="value">0 Item</div></div>
-                    <div class="stat-card" onclick="window.showDashDetail('Semua Produk')"><i class="material-icons" style="color:purple">inventory</i><div class="title">Jenis Produk</div><div id="stat-allproducts" class="value">0</div></div>
-                    <div class="stat-card" onclick="window.showDashDetail('Total Transaksi')"><i class="material-icons" style="color:var(--warning-color)">receipt</i><div class="title">Transaksi</div><div id="stat-counttx" class="value">0</div></div>
+                    <div class="stat-card" onclick="window.showDashDetail('Stok Menipis')"><i class="material-icons" style="color:var(--danger-color)">warning</i><div class="title">Stok Tipis</div><div id="stat-lowstock" class="value">0</div></div>
+                    <div class="stat-card" onclick="window.showDashDetail('Semua Produk')"><i class="material-icons" style="color:purple">inventory</i><div class="title">Produk</div><div id="stat-allproducts" class="value">0</div></div>
                 </div>
-            </div>
-
-            <!-- PRODUK -->
-            <div id="page-product" class="page-component hidden">
-                <h2>Manajemen Produk</h2>
-                <div style="display:flex; flex-direction:column; gap:10px; margin: 15px 0;">
-                    <button class="btn btn-primary" onclick="window.openScanner('product')"><i class="material-icons">qr_code_scanner</i>Scan Barcode</button>
-                    <div style="display:flex; gap:10px;"><input type="text" id="product-search" placeholder="Cari..." oninput="window.renderProducts()" style="margin:0"><button class="btn btn-primary" onclick="window.openProdModal()">Tambah</button></div>
-                </div>
-                <div id="product-list"></div>
             </div>
 
             <!-- KASIR -->
             <div id="page-pos" class="page-component hidden">
                 <div style="display:grid; grid-template-columns: 1fr; gap:20px;" id="pos-layout-grid">
                     <div>
-                        <button class="btn btn-primary" style="width:100%; margin-bottom:10px" onclick="window.openScanner('pos')">Scan Kamera Barcode</button>
+                        <button class="btn btn-primary" style="width:100%; margin-bottom:10px" onclick="window.openScanner('pos')"><i class="material-icons">qr_code_scanner</i>Scan Barcode</button>
                         <input type="text" id="pos-search" placeholder="Cari barang..." oninput="window.renderPosProducts()">
                         <div class="products-grid" id="pos-products-grid"></div>
                     </div>
                     <div style="background:white; border-radius:12px; border:1px solid #eee; overflow:hidden">
-                        <div style="padding:15px; background:#f9f9f9; font-weight:bold; text-align:center;">Keranjang Kasir</div>
+                        <div style="padding:15px; background:#f9f9f9; font-weight:bold; text-align:center;">Keranjang</div>
                         <div id="cart-items-container" style="padding:10px; min-height:150px;"></div>
                         <div style="padding:15px; border-top:1px solid #eee;">
                             <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Total:</span><span id="cart-total-view" style="font-weight:bold; font-size:18px; color:var(--primary-color)">Rp 0</span></div>
-                            <input type="text" id="cart-cash-input" placeholder="Bayar Tunai (Rp)" oninput="window.rupiahInp(this); window.calcChange();">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Kembali:</span><span id="cart-change-view" style="font-weight:bold; color:var(--success-color)">Rp 0</span></div>
-                            <button class="btn btn-success" style="width:100%; height:45px;" onclick="window.processPayment()">PROSES</button>
+                            <select id="pos-payment-method" onchange="window.togglePaymentFields()"><option value="Cash">Tunai (Cash)</option><option value="Digital">Digital / QRIS</option></select>
+                            <div id="cash-fields">
+                                <input type="text" id="cart-cash-input" placeholder="Uang Bayar (Rp)" oninput="window.rupiahInp(this); window.calcChange();">
+                                <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Kembali:</span><span id="cart-change-view" style="font-weight:bold; color:var(--success-color)">Rp 0</span></div>
+                            </div>
+                            <button class="btn btn-success" style="width:100%; height:45px;" onclick="window.processPayment()">PROSES TRANSAKSI</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- STOK -->
-            <div id="page-stock" class="page-component hidden">
-                <h2>Stok Gudang</h2>
-                <button class="btn btn-primary" style="width:100%; margin:15px 0" onclick="window.openScanner('stock')">Scan Cari Stok</button>
-                <input type="text" id="stock-search" placeholder="Cari..." oninput="window.renderStock()">
-                <div id="stock-list"></div>
+            <!-- PRODUK -->
+            <div id="page-product" class="page-component hidden">
+                <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><h2>Produk</h2><button class="btn btn-primary" onclick="window.openProdModal()">Tambah</button></div>
+                <div id="product-list"></div>
             </div>
-
-            <!-- PENGATURAN -->
+            <div id="page-history" class="page-component hidden"><h2>Riwayat</h2><div id="history-list"></div></div>
+            <div id="page-stock" class="page-component hidden"><h2>Stok</h2><div id="stock-list"></div></div>
             <div id="page-settings" class="page-component hidden">
                 <h2>Pengaturan</h2>
-                <div class="card-panel">
-                    <div style="display:flex; align-items:center; gap:15px; margin-bottom: 20px;">
+                <div style="background:white; padding:20px; border-radius:12px; border:1px solid #eee; margin-top:15px;">
+                    <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
                         <div id="settings-logo-preview" style="width:80px;height:80px;border:2px dashed #ccc;border-radius:50%;display:flex;justify-content:center;align-items:center;overflow:hidden;"><i class="material-icons">storefront</i></div>
-                        <div><label style="font-weight:600; font-size:12px">Logo Toko (Maks 500KB)</label><input type="file" accept="image/*" onchange="window.previewLogo(this)"></div>
+                        <input type="file" accept="image/*" onchange="window.previewLogo(this)">
                     </div>
                     <label>Nama Toko</label><input type="text" id="set-store-name">
-                    <label>Nama Admin/Pemilik</label><input type="text" id="set-admin-name">
-                    <label>Alamat Lengkap</label><input type="text" id="set-store-address">
-                    <label>WhatsApp / Telp</label><input type="text" id="set-store-phone">
-                    <label>Nomor NPWP</label><input type="text" id="set-store-npwp">
-                    <button class="btn btn-primary" style="width:100%; height:45px" onclick="window.saveSettings()">SIMPAN PERUBAHAN</button>
+                    <label>Nama Admin</label><input type="text" id="set-admin-name">
+                    <label>Alamat</label><input type="text" id="set-store-address">
+                    <label>WhatsApp Toko</label><input type="text" id="set-store-phone">
+                    <label>NPWP</label><input type="text" id="set-store-npwp">
+                    <button class="btn btn-primary" style="width:100%" onclick="window.saveSettings()">SIMPAN</button>
                 </div>
-            </div>
-            
-            <div id="page-history" class="page-component hidden">
-                <h2>Riwayat Transaksi</h2>
-                <input type="text" id="history-search" placeholder="Cari Invoice..." oninput="window.renderHistory()">
-                <div id="history-list"></div>
             </div>
         </div>
     </div>
@@ -219,12 +212,12 @@
         let cart = [];
         let html5Scanner = null;
         let tempLogoBase64 = "";
+        window.currentTx = null;
 
         // --- UTILS ---
         window.rupiah = (n) => 'Rp ' + (n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         window.cleanNum = (s) => parseInt(String(s).replace(/[^\d]/g, '')) || 0;
         window.rupiahInp = (el) => { let v = el.value.replace(/[^\d]/g, ''); el.value = v ? parseInt(v).toLocaleString('id-ID') : ''; };
-        window.togglePwd = (id, el) => { const x = document.getElementById(id); x.type = x.type === 'password' ? 'text' : 'password'; el.innerText = x.type === 'password' ? 'visibility_off' : 'visibility'; };
 
         // --- AUTH ---
         window.handleLogin = async () => {
@@ -232,22 +225,18 @@
             const p = document.getElementById('login-password').value;
             try { await signInWithEmailAndPassword(auth, e, p); } catch(err) { alert("Login Gagal!"); }
         };
-
         window.handleRegister = async () => {
             const sn = document.getElementById('reg-store-name').value.trim();
             const an = document.getElementById('reg-admin-name').value.trim();
             const e = document.getElementById('reg-email').value.trim();
             const p = document.getElementById('reg-password').value;
-            if(!sn || !an || !e || p.length < 6) return alert("Lengkapi data!");
             try {
                 const res = await createUserWithEmailAndPassword(auth, e, p);
-                const initial = { name: sn, admin: an, address: "", phone: "", npwp: "", logo: "", email: e };
-                await setDoc(doc(db, "users", res.user.uid), { config: initial });
-                alert("Registrasi Berhasil!"); window.switchAuth('login');
-            } catch(err) { alert("Gagal: " + err.message); }
+                await setDoc(doc(db, "users", res.user.uid), { config: { name: sn, admin: an, address: "", phone: "", logo: "", email: e, npwp: "" } });
+                alert("Berhasil!"); window.switchAuth('login');
+            } catch(err) { alert(err.message); }
         };
-
-        window.handleLogout = () => { if(confirm("Keluar dari aplikasi?")) signOut(auth); };
+        window.handleLogout = () => signOut(auth);
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -282,30 +271,133 @@
 
         function updateUIConfig() {
             const n = storeConfig.name || "Toko POS";
-            const logoUrl = storeConfig.logo || "";
-            document.querySelectorAll('.dynamic-store-name-view').forEach(el => el.innerText = n);
-            document.getElementById('side-store-name').innerText = n;
             document.getElementById('mob-store-name').innerText = n;
-            // dash-store-name sudah dihapus dari HTML, jadi baris ini dihapus agar tidak error
+            document.getElementById('side-store-name').innerText = n;
             document.getElementById('dash-welcome').innerText = "Halo, " + (storeConfig.admin || "Admin") + "!";
-            
-            const logoHtml = logoUrl ? `<img src="${logoUrl}" class="store-logo-img">` : `<i class="material-icons logo-placeholder">storefront</i>`;
-            const headerLogoHtml = logoUrl ? `<img src="${logoUrl}" style="width:32px;height:32px;object-fit:contain;border-radius:50%">` : `<i class="material-icons" style="color:var(--primary-color)">storefront</i>`;
-            
+            const logoHtml = storeConfig.logo ? `<img src="${storeConfig.logo}" class="store-logo-img">` : `<i class="material-icons logo-placeholder">storefront</i>`;
             document.getElementById('sidebar-logo-container').innerHTML = logoHtml;
-            document.getElementById('mobile-logo-container').innerHTML = headerLogoHtml;
+            document.getElementById('mobile-logo-container').innerHTML = storeConfig.logo ? `<img src="${storeConfig.logo}" style="width:30px;height:30px;border-radius:50%">` : `<i class="material-icons">storefront</i>`;
             document.querySelectorAll('.login-logo-container-class').forEach(el => el.innerHTML = logoHtml);
         }
 
-        // --- SETTINGS ---
-        window.previewLogo = (input) => {
-            const file = input.files[0];
-            if (file) {
-                if (file.size > 500 * 1024) return alert("Ukuran foto terlalu besar (Maks 500KB)");
-                const reader = new FileReader();
-                reader.onload = (e) => { tempLogoBase64 = e.target.result; document.getElementById('settings-logo-preview').innerHTML = `<img src="${tempLogoBase64}" style="width:100%;height:100%;object-fit:contain">`; };
-                reader.readAsDataURL(file);
+        // --- POS & TRANSAKSI ---
+        window.togglePaymentFields = () => {
+            const m = document.getElementById('pos-payment-method').value;
+            document.getElementById('cash-fields').style.display = m === 'Cash' ? 'block' : 'none';
+        };
+
+        window.processPayment = async () => {
+            const tot = cart.reduce((s,i) => s + (i.price*i.qty), 0);
+            const method = document.getElementById('pos-payment-method').value;
+            let cash = tot;
+            if(method === 'Cash') {
+                cash = cleanNum(document.getElementById('cart-cash-input').value);
+                if(cash < tot) return alert("Uang kurang!");
             }
+            if(cart.length === 0) return alert("Keranjang kosong!");
+
+            const tx = {
+                invoice: "INV-"+Date.now(),
+                timestamp: Date.now(),
+                date: new Date().toLocaleString('id-ID'),
+                total: tot,
+                totalCost: cart.reduce((s,i)=>s+((i.cost||0)*i.qty),0),
+                method: method,
+                cash: cash,
+                items: [...cart]
+            };
+
+            await addDoc(collection(db, "users", currentUser.uid, "transactions"), tx);
+            for(let i of cart) {
+                const p = globalProducts.find(x => x.id === i.id);
+                await updateDoc(doc(db, "users", currentUser.uid, "products", i.id), { stock: p.stock - i.qty });
+            }
+            window.showReceipt(tx);
+            cart = []; window.renderCart(); document.getElementById('cart-cash-input').value = "";
+        };
+
+        window.showReceipt = (tx) => {
+            window.currentTx = tx;
+            let its = tx.items.map(i => `<div class='receipt-row'><span>${i.name} x${i.qty}</span><span>${rupiah(i.price*i.qty)}</span></div>`).join('');
+            let headerLogo = storeConfig.logo ? `<center><img src='${storeConfig.logo}' style='width:50px;margin-bottom:5px'></center>` : '';
+            
+            const strukHtml = `
+                <div class='receipt-paper' id='thermal-struk'>
+                    ${headerLogo}
+                    <center><strong>${storeConfig.name.toUpperCase()}</strong><br><small>${storeConfig.address || ''}</small></center>
+                    <div class='receipt-divider'></div>
+                    <div class='receipt-row'><span>Tgl:</span><span>${tx.date}</span></div>
+                    <div class='receipt-row'><span>No:</span><span>${tx.invoice}</span></div>
+                    <div class='receipt-divider'></div>
+                    ${its}
+                    <div class='receipt-divider'></div>
+                    <div class='receipt-row'><strong>TOTAL</strong><strong>${rupiah(tx.total)}</strong></div>
+                    <div class='receipt-row'><span>METODE</span><span>${tx.method}</span></div>
+                    <div class='receipt-row'><span>BAYAR</span><span>${rupiah(tx.cash)}</span></div>
+                    <div class='receipt-row'><span>KEMBALI</span><span>${rupiah(tx.cash - tx.total)}</span></div>
+                    <div class='receipt-divider'></div>
+                    <center><small>Terima Kasih</small></center>
+                </div>
+                <div style='margin-top:15px'>
+                    <label style='font-size:12px;font-weight:bold'>WhatsApp Pelanggan:</label>
+                    <input type='text' id='wa-num' placeholder='0812...' style='margin-bottom:10px'>
+                </div>
+                <div style='display:flex;gap:5px'>
+                    <button class='btn btn-danger' style='flex:1' onclick='window.closeModal()'>Tutup</button>
+                    <button class='btn btn-primary' style='flex:1' onclick='window.printStruk()'><i class='material-icons'>print</i>Cetak</button>
+                    <button class='btn btn-success' style='flex:1.5;background:#25D366' onclick='window.sendWA()'><i class='material-icons'>share</i>WA</button>
+                </div>
+            `;
+            window.openModal(strukHtml);
+        };
+
+        window.printStruk = () => {
+            const content = document.getElementById('thermal-struk').innerHTML;
+            document.getElementById('print-section-area').innerHTML = `<div class='receipt-paper'>${content}</div>`;
+            window.print();
+            document.getElementById('print-section-area').innerHTML = '';
+        };
+
+        window.sendWA = () => {
+            const tx = window.currentTx;
+            let n = document.getElementById('wa-num').value.replace(/\D/g, '');
+            if(!n) return alert("Isi nomor WA!");
+            if(n.startsWith('0')) n = '62' + n.slice(1);
+
+            let msg = `*${storeConfig.name.toUpperCase()}*\n`;
+            msg += `--------------------------\n`;
+            msg += `No. Inv : ${tx.invoice}\n`;
+            msg += `Tanggal : ${tx.date}\n`;
+            msg += `--------------------------\n`;
+            tx.items.forEach(i => {
+                msg += `${i.name} x${i.qty} = ${rupiah(i.price*i.qty)}\n`;
+            });
+            msg += `--------------------------\n`;
+            msg += `*TOTAL : ${rupiah(tx.total)}*\n`;
+            msg += `Bayar : ${rupiah(tx.cash)}\n`;
+            msg += `Kembali : ${rupiah(tx.cash - tx.total)}\n`;
+            msg += `--------------------------\n`;
+            msg += `Terima kasih!`;
+
+            window.open(`https://wa.me/${n}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        // --- DASHBOARD & SETTINGS ---
+        window.renderDashboard = () => {
+            const f = document.getElementById('dash-filter-select').value;
+            const now = new Date();
+            const txs = globalTransactions.filter(t => {
+                const d = new Date(t.timestamp);
+                if(f === 'Harian') return now.toDateString() === d.toDateString();
+                if(f === 'Mingguan') return (now - d) / 86400000 <= 7;
+                return now.getMonth() === d.getMonth();
+            });
+            const omzet = txs.reduce((s,t) => s + t.total, 0);
+            const modal = txs.reduce((s,t) => s + (t.totalCost || 0), 0);
+            document.getElementById('stat-omzet').innerText = rupiah(omzet);
+            document.getElementById('stat-untung').innerText = rupiah(omzet - modal);
+            document.getElementById('stat-lowstock').innerText = globalProducts.filter(p => (p.stock||0) < 5).length;
+            document.getElementById('stat-allproducts').innerText = globalProducts.length;
         };
 
         window.saveSettings = async () => {
@@ -316,59 +408,24 @@
                 phone: String(document.getElementById('set-store-phone').value || ""),
                 npwp: String(document.getElementById('set-store-npwp').value || ""),
                 logo: String(tempLogoBase64 || storeConfig.logo || ""),
-                email: String(storeConfig.email || currentUser.email || "")
+                email: String(storeConfig.email || currentUser.email)
             };
-            try {
-                await setDoc(doc(db, "users", currentUser.uid), { config: upd }, { merge: true });
-                alert("Berhasil Disimpan!");
-            } catch(e) { alert("Gagal Simpan: " + e.message); }
+            await setDoc(doc(db, "users", currentUser.uid), { config: upd }, { merge: true });
+            alert("Tersimpan!");
         };
 
-        // --- DASHBOARD LOGIC ---
-        function getFiltered() {
-            const f = document.getElementById('dash-filter-select').value;
-            const now = new Date();
-            return globalTransactions.filter(t => {
-                const d = new Date(t.date);
-                if(f === 'Harian') return now.toDateString() === d.toDateString();
-                if(f === 'Mingguan') return (now - d) / 86400000 <= 7;
-                return now.getMonth() === d.getMonth();
-            });
-        }
-
-        window.renderDashboard = () => {
-            const txs = getFiltered();
-            const omzet = txs.reduce((s,t) => s + t.total, 0);
-            const modal = txs.reduce((s,t) => s + (t.totalCost || 0), 0);
-            document.getElementById('stat-omzet').innerText = window.rupiah(omzet);
-            document.getElementById('stat-untung').innerText = window.rupiah(omzet - modal);
-            document.getElementById('stat-margin').innerText = omzet > 0 ? (((omzet-modal)/omzet)*100).toFixed(1) + "%" : "0%";
-            document.getElementById('stat-lowstock').innerText = globalProducts.filter(p => (p.stock||0) < 5).length + " Item";
-            document.getElementById('stat-allproducts').innerText = globalProducts.length;
-            document.getElementById('stat-counttx').innerText = txs.length;
-        };
-
-        window.showDashDetail = (title) => {
-            let h = `<h3>${title}</h3><hr style='margin:10px 0'><div style='max-height:250px; overflow-y:auto;'>`;
-            if(title === 'Total Omset' || title === 'Untung Bersih') getFiltered().forEach(t => h += `<div class='receipt-row'><span>${t.invoice}</span><b>${window.rupiah(t.total)}</b></div>`);
-            else if(title === 'Stok Menipis') globalProducts.filter(p => (p.stock||0) < 5).forEach(p => h += `<div class='receipt-row'><span>${p.name}</span><b style='color:red'>Sisa ${p.stock}</b></div>`);
-            else globalProducts.forEach(p => h += `<div class='receipt-row'><span>${p.name}</span><b>Stok: ${p.stock}</b></div>`);
-            h += `</div><button class='btn btn-danger' style='width:100%;margin-top:15px' onclick='window.closeModal()'>Tutup</button>`;
-            window.openModal(h);
-        };
-
-        window.exportCSV = () => {
-            const txs = getFiltered();
-            if(txs.length === 0) return alert("Data kosong");
-            let csv = "Invoice,Tanggal,Total,Profit\n";
-            txs.forEach(t => { csv += `${t.invoice},${t.date},${t.total},${t.total - (t.totalCost || 0)}\n`; });
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Laporan.csv`; a.click();
+        window.previewLogo = (input) => {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => { tempLogoBase64 = e.target.result; document.getElementById('settings-logo-preview').innerHTML = `<img src="${tempLogoBase64}" style="width:100%;height:100%;object-fit:contain">`; };
+                reader.readAsDataURL(file);
+            }
         };
 
         // --- SCANNER ---
         window.openScanner = (target) => {
-            window.openModal(`<h3>Scan</h3><hr style='margin:10px 0'><div id='cam' style='width:100%;height:250px;background:black'></div><button class='btn btn-danger' style='width:100%;margin-top:10px' onclick='window.stopScanner()'>Tutup Kamera</button>`);
+            window.openModal(`<h3>Scan</h3><hr style='margin:10px 0'><div id='cam' style='width:100%;height:250px;background:black'></div><button class='btn btn-danger' style='width:100%;margin-top:10px' onclick='window.stopScanner()'>Tutup</button>`);
             setTimeout(() => {
                 html5Scanner = new Html5QrcodeScanner("cam", { fps: 10, qrbox: 220 });
                 html5Scanner.render((txt) => {
@@ -387,62 +444,56 @@
         };
         window.stopScanner = () => { if(html5Scanner) html5Scanner.clear().then(window.closeModal).catch(window.closeModal); else window.closeModal(); };
 
-        // --- CRUD & RENDER ---
-        window.saveProd = async (id) => {
-            const d = { sku: document.getElementById('f-sku').value, name: document.getElementById('f-name').value, cost: window.cleanNum(document.getElementById('f-cost').value), price: window.cleanNum(document.getElementById('f-price').value) };
-            if(!d.name) return alert("Nama wajib diisi!");
-            if(id && id !== 'null') await updateDoc(doc(db, "users", currentUser.uid, "products", id), d);
-            else { d.stock = 0; await addDoc(collection(db, "users", currentUser.uid, "products"), d); }
-            window.closeModal();
+        // --- UI HELPERS ---
+        window.openModal = (h) => { document.getElementById('modal-content').innerHTML = h; document.getElementById('modal-container').classList.remove('hidden'); };
+        window.closeModal = () => document.getElementById('modal-container').classList.add('hidden');
+        window.switchAuth = (t) => { document.getElementById('auth-login-card').classList.toggle('hidden', t==='register'); document.getElementById('auth-register-card').classList.toggle('hidden', t==='login'); };
+        window.toggleSidebar = (b) => document.getElementById('sidebar').classList.toggle('active', b);
+        window.switchPage = (idx, el) => {
+            document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
+            if(el) el.classList.add('active');
+            document.querySelectorAll('.page-component').forEach(p => p.classList.add('hidden'));
+            const pgs = ['page-dashboard','page-history','page-product','page-pos','page-stock','page-settings'];
+            document.getElementById(pgs[idx]).classList.remove('hidden');
+            if(pgs[idx] === 'page-settings') {
+                document.getElementById('set-store-name').value = storeConfig.name || "";
+                document.getElementById('set-admin-name').value = storeConfig.admin || "";
+                document.getElementById('set-store-address').value = storeConfig.address || "";
+                document.getElementById('set-store-phone').value = storeConfig.phone || "";
+                document.getElementById('set-store-npwp').value = storeConfig.npwp || "";
+            }
+            window.toggleSidebar(false);
         };
-        window.delProd = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "users", currentUser.uid, "products", id)); };
+
+        // --- PRODUK & POS RENDER ---
         window.renderProducts = () => {
-            let q = document.getElementById('product-search').value.toLowerCase();
             let h = '';
-            globalProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)).forEach(p => h += `<div class='item-card'><div><strong>${p.name}</strong><br><small>${window.rupiah(p.price)}</small></div><button class='btn btn-success' onclick="window.openProdModal('${p.id}')">Edit</button></div>`);
+            globalProducts.forEach(p => h += `<div class='item-card'><div><strong>${p.name}</strong><br><small>${rupiah(p.price)}</small></div><button class='btn btn-success' onclick="window.openProdModal('${p.id}')">Edit</button></div>`);
             document.getElementById('product-list').innerHTML = h;
-        };
-        window.openProdModal = (id = null) => {
-            const p = globalProducts.find(x => x.id === id) || {sku:'', name:'', cost:0, price:0};
-            window.openModal(`<h3>${id?'Edit':'Tambah'}</h3><label>SKU</label><div style='display:flex;gap:5px'><input type='text' id='f-sku' value='${p.sku}' style='margin:0;flex:1'><button class='btn btn-primary' onclick="window.openScanner('input-sku')">Scan</button></div><label>Nama</label><input type='text' id='f-name' value='${p.name}'><label>Modal (HPP)</label><input type='number' id='f-cost' value='${p.cost}'><label>Jual</label><input type='number' id='f-price' value='${p.price}'><button class='btn btn-success' style='width:100%' onclick='window.saveProd("${id}")'>Simpan</button>`);
         };
         window.renderPosProducts = () => {
             let q = document.getElementById('pos-search').value.toLowerCase();
             let h = '';
-            globalProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)).forEach(p => h += `<div class='product-box' onclick="window.addCart('${p.id}')"><h5>${p.name}</h5><b>${window.rupiah(p.price)}</b><br><small>Stok: ${p.stock}</small></div>`);
+            globalProducts.filter(p => p.name.toLowerCase().includes(q)).forEach(p => h += `<div class='product-box' onclick="window.addCart('${p.id}')"><h5>${p.name}</h5><b>${rupiah(p.price)}</b></div>`);
             document.getElementById('pos-products-grid').innerHTML = h;
         };
         window.addCart = (id) => {
             const p = globalProducts.find(x => x.id === id);
             const ex = cart.find(x => x.id === id);
-            if((p.stock || 0) <= (ex ? ex.qty : 0)) return alert("Stok Habis!");
+            if(p.stock <= (ex ? ex.qty : 0)) return alert("Stok Habis!");
             if(ex) ex.qty++; else cart.push({...p, qty: 1});
             window.renderCart();
         };
         window.renderCart = () => {
-            let h = ''; cart.forEach((i, idx) => h += `<div class='receipt-row' style='margin-bottom:8px'><span>${i.name} x${i.qty}</span><i class='material-icons' style='color:red;cursor:pointer' onclick="window.remCart(${idx})">delete</i></div>`);
+            let h = ''; cart.forEach((i, idx) => h += `<div class='receipt-row'><span>${i.name} x${i.qty}</span><i class='material-icons' style='color:red;cursor:pointer' onclick="window.remCart(${idx})">delete</i></div>`);
             document.getElementById('cart-items-container').innerHTML = h;
-            const tot = cart.reduce((s,i) => s + (i.price*i.qty), 0);
-            document.getElementById('cart-total-view').innerText = window.rupiah(tot);
-            window.calcChange();
+            document.getElementById('cart-total-view').innerText = rupiah(cart.reduce((s,i) => s + (i.price*i.qty), 0));
         };
         window.remCart = (idx) => { cart.splice(idx,1); window.renderCart(); };
         window.calcChange = () => {
-            const tot = cart.reduce((s,i) => s + (i.price*i.qty), 0);
-            const cash = window.cleanNum(document.getElementById('cart-cash-input').value);
-            document.getElementById('cart-change-view').innerText = window.rupiah(Math.max(0, cash - tot));
-        };
-        window.processPayment = async () => {
-            const tot = cart.reduce((s,i) => s + (i.price*i.qty), 0);
-            const cash = window.cleanNum(document.getElementById('cart-cash-input').value);
-            if(cash < tot || cart.length === 0) return alert("Cek Keranjang!");
-            const tx = { invoice: "INV-"+Date.now(), timestamp: Date.now(), date: new Date().toISOString().split('T')[0], total: tot, totalCost: cart.reduce((s,i)=>s+((i.cost || 0)*i.qty),0), items: [...cart] };
-            await addDoc(collection(db, "users", currentUser.uid, "transactions"), tx);
-            for(let i of cart) {
-                const p = globalProducts.find(x => x.id === i.id);
-                await updateDoc(doc(db, "users", currentUser.uid, "products", i.id), { stock: p.stock - i.qty });
-            }
-            alert("Berhasil!"); cart = []; window.renderCart();
+            const t = cart.reduce((s,i)=>s+(i.price*i.qty),0);
+            const c = cleanNum(document.getElementById('cart-cash-input').value);
+            document.getElementById('cart-change-view').innerText = rupiah(Math.max(0, c-t));
         };
         window.renderStock = () => {
             let h = ''; globalProducts.forEach(p => h += `<div class='item-card'><span>${p.name}</span><div style='display:flex;align-items:center;gap:10px'><button class='btn' onclick="window.upStock('${p.id}',-1)">-</button><b>${p.stock}</b><button class='btn' onclick="window.upStock('${p.id}',1)">+</button></div></div>`);
@@ -453,36 +504,19 @@
             await updateDoc(doc(db, "users", currentUser.uid, "products", id), { stock: Math.max(0, (p.stock || 0) + v) });
         };
         window.renderHistory = () => {
-            let h = ''; globalTransactions.forEach(t => h += `<div class='item-card' onclick='window.showReceipt(${JSON.stringify(t)})'><div><strong>${t.invoice}</strong><small>${t.date}</small></div><b>${window.rupiah(t.total)}</b></div>`);
+            let h = ''; globalTransactions.forEach(t => h += `<div class='item-card' onclick='window.showReceipt(${JSON.stringify(t)})' style='cursor:pointer'><div><strong>${t.invoice}</strong><small>${t.date}</small></div><b>${window.rupiah(t.total)}</b></div>`);
             document.getElementById('history-list').innerHTML = h;
         };
-        window.showReceipt = (tx) => {
-            window.openModal(`<div class='receipt-paper'><strong>${tx.invoice}</strong><hr>${tx.items.map(i=>`<div>${i.name} x${i.qty}</div>`).join('')}<hr>TOTAL: ${window.rupiah(tx.total)}</div><button class='btn btn-danger' style='width:100%;margin-top:10px' onclick='window.closeModal()'>Tutup</button>`);
+        window.openProdModal = (id = null) => {
+            const p = globalProducts.find(x => x.id === id) || {sku:'', name:'', cost:0, price:0};
+            window.openModal(`<h3>Produk</h3><label>SKU</label><input type='text' id='f-sku' value='${p.sku}'><label>Nama</label><input type='text' id='f-name' value='${p.name}'><label>HPP</label><input type='number' id='f-cost' value='${p.cost}'><label>Jual</label><input type='number' id='f-price' value='${p.price}'><button class='btn btn-success' style='width:100%' onclick='window.saveProd("${id}")'>Simpan</button>`);
         };
-        window.switchPage = (idx, el) => {
-            document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
-            if(el) el.classList.add('active');
-            document.querySelectorAll('.page-component').forEach(p => p.classList.add('hidden'));
-            const pgs = ['page-dashboard','page-history','page-product','page-pos','page-stock','page-settings'];
-            document.getElementById(pgs[idx]).classList.remove('hidden');
-            if(pgs[idx] === 'page-settings') window.loadSettingsUI();
-            window.toggleSidebar(false);
+        window.saveProd = async (id) => {
+            const d = { sku: document.getElementById('f-sku').value, name: document.getElementById('f-name').value, cost: window.cleanNum(document.getElementById('f-cost').value), price: window.cleanNum(document.getElementById('f-price').value) };
+            if(id && id !== 'null') await updateDoc(doc(db, "users", currentUser.uid, "products", id), d);
+            else { d.stock = 0; await addDoc(collection(db, "users", currentUser.uid, "products"), d); }
+            window.closeModal();
         };
-
-        window.loadSettingsUI = () => {
-            const cfg = storeConfig;
-            document.getElementById('set-store-name').value = cfg.name || "";
-            document.getElementById('set-admin-name').value = cfg.admin || "";
-            document.getElementById('set-store-address').value = cfg.address || "";
-            document.getElementById('set-store-phone').value = cfg.phone || "";
-            document.getElementById('set-store-npwp').value = cfg.npwp || "";
-            if(cfg.logo) document.getElementById('settings-logo-preview').innerHTML = `<img src="${cfg.logo}" style="width:100%;height:100%;object-fit:contain">`;
-        };
-
-        window.openModal = (h) => { document.getElementById('modal-content').innerHTML = h; document.getElementById('modal-container').classList.remove('hidden'); };
-        window.closeModal = () => document.getElementById('modal-container').classList.add('hidden');
-        window.switchAuth = (t) => { document.getElementById('auth-login-card').classList.toggle('hidden', t==='register'); document.getElementById('auth-register-card').classList.toggle('hidden', t==='login'); };
-        window.toggleSidebar = (b) => { document.getElementById('sidebar').classList.toggle('active', b); document.getElementById('sidebar-overlay').classList.toggle('active', b); };
     </script>
 </body>
 </html>
